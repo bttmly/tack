@@ -2,7 +2,7 @@
   "name": "tack",
   "version": "0.1.0",
   "description": "Build HTML strings",
-  "main": "index.js",
+  "main": "dist/tack.js",
   "directories": {
     "test": "test"
   },
@@ -11,7 +11,7 @@
     "watch": "coffee -w -o ./dist src/tack.coffee",
     "test": "mocha --compilers coffee:coffee-script/register -R spec test/spec.coffee"
   },
-  "author": "",
+  "author": "Nick Bottomley <nhbottomley@gmail.com>",
   "license": "MIT",
   "devDependencies": {
     "chai": "^1.9.1",
