@@ -1,0 +1,31 @@
+{
+  "name": "tack",
+  "version": "0.1.0",
+  "authors": [
+    "Nick Bottomley <nhbottomley@gmail.com>"
+  ],
+  "description": "Programmatically build HTML strings",
+  "main": "dist/tack.js",
+  "moduleType": [
+    "globals",
+    "node"
+  ],
+  "keywords": [
+    "html",
+    "tag",
+    "string"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "components",
+    "test",
+    "tests"
+  ],
+  "devDependencies": {
+    "mocha": "~1.21.4",
+    "chai": "~1.9.1"
+  }
+}
