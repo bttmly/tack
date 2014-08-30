@@ -7,7 +7,7 @@
     "test": "test"
   },
   "scripts": {
-    "build": "coffee -o ./dist src/tack.coffee",
+    "build": "coffee -o ./dist src/tack.coffee && coffee -o ./test test/spec.coffee",
     "watch": "coffee -w -o ./dist src/tack.coffee",
     "test": "mocha --compilers coffee:coffee-script/register -R spec test/spec.coffee"
   },
