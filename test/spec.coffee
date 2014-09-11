@@ -41,6 +41,7 @@ describe "Maker function", ->
       tag.children.length.should.equal 1
       tag.childAt( 0 ).tagName.should.equal "ul"
       tag.childAt( 0 ).childAt( 0 ).tagName.should.equal "li"
+      console.log tag.render()
       tag.render().should.equal '<div id="top"><ul class="list" id="middle"><li class="item" id="bottom">Hello</li></ul></div>'
 
 describe "Methods", ->
