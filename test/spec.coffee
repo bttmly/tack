@@ -24,7 +24,7 @@ describe "Maker function", ->
       input.type = "text"
       input.name = "text-input"
       tag = tack input
-      tag.toString().should.equal '<input class="class1 class2" id="the-input" type="text" name="text-input">'
+      tag.toString().should.equal '<input class="class1 class2" id="the-input" name="text-input" type="text">'
 
     it "should work recursively if node has children", ->
       html = """

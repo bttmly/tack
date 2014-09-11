@@ -147,7 +147,8 @@ class Tack
     result.push "<#{ @tagName } "
     if @classes.length
       result.push "class=\"#{ @classes.join " " }\" "
-    for attr of @attributes
+    attrs = Object.keys( @attributes ).sort()
+    for attr in attrs
       str += "#{ attr }=\"#{ @attributes[ attr ] }\" "
     result.push str.trim()
     result.push ">"
