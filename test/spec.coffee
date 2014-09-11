@@ -41,10 +41,9 @@ describe "Maker function", ->
       tag.children.length.should.equal 1
       tag.childAt( 0 ).tagName.should.equal "ul"
       tag.childAt( 0 ).childAt( 0 ).tagName.should.equal "li"
-      console.log tag.render()
       tag.render().should.equal '<div id="top"><ul class="list" id="middle"><li class="item" id="bottom">Hello</li></ul></div>'
 
-describe "Methods", ->
+describe "Instance methods", ->
   tag = undefined
   proto = undefined
   ctor = undefined
@@ -53,7 +52,7 @@ describe "Methods", ->
     proto = Object.getPrototypeOf tag
     ctor = proto.constructor
 
-  describe "attr", ->
+  describe ".attr()", ->
     it "Sets an attribute when called with two arguments, and returns self", ->
       tag.attr( "type", "text" ).should.equal tag
       tag.attributes.type.should.equal "text"
@@ -62,7 +61,7 @@ describe "Methods", ->
       tag.attr "type", "text"
       tag.attr( "type" ).should.equal "text"
 
-  describe "id", ->
+  describe ".id()", ->
     it "Sets the id attribute when called with an argument, and returns self", ->
       tag.id( "thing" ).should.equal tag
       tag.attributes.id.should.equal "thing"
@@ -71,15 +70,16 @@ describe "Methods", ->
       tag.id "thing"
       tag.id().should.equal "thing"
 
-  describe "addClass", ->
+  describe ".addClass()", ->
     it "Adds a class if not already present, and returns self", ->
       tag.addClass "someThing"
       tag.addClass "otherThing"
       tag.addClass( "someThing" ).should.equal tag
       ( "someThing" in tag.classes ).should.be.ok
+      tag.addClass "someThing"
       tag.classes.length.should.equal 2
 
-  describe "removeClass", ->
+  describe ".removeClass()", ->
     it "Adds a class if not already present, and returns self", ->
       tag.addClass "someThing"
       tag.addClass "otherThing"
@@ -87,20 +87,61 @@ describe "Methods", ->
       ( "someThing" in tag.classes ).should.not.be.ok
       tag.classes.length.should.equal 1
 
-  describe "addChild", ->
+  describe ".addChild()", ->
     it "Adds a child tack", ->
       tag.addChild "div"
       tag.children.length.should.equal 1
       tag.children[0].should.be.instanceof ctor
 
-  describe "childAt", ->
+  describe ".childAt()", ->
     it "Returns the child at the given index", ->
       tag.addChild "p"
       tag.childAt( 0 ).tagName.should.equal "p"
 
-  describe "render", ->
+  describe ".render()", ->
     it "Generates the correct HTML string", ->
       tag.id "some-id"
       tag.addClass "some-class"
       tag.attr "name", "some-name"
       tag.render().should.equal '<div class="some-class" id="some-id" name="some-name"></div>'
+
+  describe ".create()", ->
+    it "Creates a DOM node from a tack", ->
+      tag.addClass "thing"
+      tag.id "blah"
+      tag.addChild "ul"
+      tag.childAt( 0 ).addChild "li"
+      node = tag.create()
+      ( node instanceof Element ).should.equal true
+      node.id.should.equal "blah"
+      node.classList.contains( "thing" ).should.equal true
+      node.children.length.should.equal 1
+      node.children[0].tagName.should.equal "UL"
+      node.children[0].children[0].tagName.should.equal "LI"
+
+describe "Static methods", ->
+  describe ".replace()", ->
+    it "replaces one DOM node with another", ->
+      div = document.createElement "div"
+      span1 = document.createElement "span"
+      span2 = document.createElement "span"
+      div.appendChild span1
+      div.children[0].should.equal span1
+      tack.replace( span1, span2 )
+      div.children[0].should.equal span2
+
+  describe ".extend()", ->
+    it "adds properties and/or methods to the Tack prototype", ->
+      tack.extend
+        func: ->
+        prop: 10
+      div = tack "div"
+      div.func.should.be.a "function"
+      div.prop.should.equal 10
+
+  describe ".fromNode()", ->
+    it "builds a Tack instance from a DOM node", ->
+      div = document.createElement "div"
+      tag = tack.fromNode( div )
+      tag.render().should.equal "<div></div>"
+

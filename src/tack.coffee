@@ -69,12 +69,12 @@ buildFromDomNode = ( node ) ->
 class TackText
   constructor: ( str ) ->
     @text = str
+
   render: -> @text
-  toString: -> @text
+
+  toString: -> @render()
 
 class Tack
-  @fromNode = buildFromDomNode
-
   constructor: ( param ) ->
     if typeof param is "string"
       throw new Error "Invalid tag name." unless tags[ param ]
@@ -136,21 +136,16 @@ class Tack
     @children.push new TackText str
     @
 
-  # map: ( fn ) ->
-  #   copy = fn @clone()
-
-  #   copy
-
   render: ->
     result = []
     str = ""
-    result.push "<#{ @tagName } "
+    result.push "<#{ @tagName }"
     if @classes.length
-      result.push "class=\"#{ @classes.join " " }\" "
+      result.push " class=\"#{ @classes.join " " }\""
     attrs = Object.keys( @attributes ).sort()
     for attr in attrs
-      str += "#{ attr }=\"#{ @attributes[ attr ] }\" "
-    result.push str.trim()
+      str += " #{ attr }=\"#{ @attributes[ attr ] }\""
+    result.push str
     result.push ">"
     unless selfClosingTags[ @tagName ]
       if @children.length
@@ -160,10 +155,30 @@ class Tack
 
   toString: -> @render()
 
+  create: ->
+    el = document.createElement @tagName
+    for attr of @attributes
+      el.setAttribute attr, @attributes[attr]
+    for cl in @classes
+      el.classList.add cl
+    el.innerHTML = @children.map ( child ) ->
+      child.render()
+    .join ""
+    el
+
   clone: ->
     new Tack @
 
 tack = ( param ) ->
   new Tack param
+
+extend tack,
+  fromNode: buildFromDomNode
+  replace: ( oldNode, newNode ) ->
+    parent = oldNode.parentElement
+    parent.insertBefore newNode, oldNode
+    parent.removeChild oldNode
+  extend: ( obj ) ->
+    extend Tack::, obj
 
 module.exports = tack
