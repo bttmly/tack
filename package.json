@@ -1,21 +1,34 @@
 {
   "name": "tack",
   "version": "0.1.0",
-  "description": "Build HTML strings",
-  "main": "dist/tack.js",
+  "description": "Build HTML strings programmatically",
+  "main": "./lib/tack.js",
   "directories": {
     "test": "test"
   },
   "scripts": {
-    "build": "coffee -o ./dist src/tack.coffee && coffee -o ./test test/spec.coffee",
-    "watch": "coffee -w -o ./dist src/tack.coffee",
-    "test": "mocha --compilers coffee:coffee-script/register -R spec test/spec.coffee"
+    "build": "browserify ./src/tack.coffee -s tack -o ./lib/tack.js src/tack.coffee",
+    "watch": "watchify ./src/tack.coffee -s tack -o ./lib/tack.js src/tack.coffee",
+    "test": "testling"
   },
   "author": "Nick Bottomley <nhbottomley@gmail.com>",
   "license": "MIT",
   "devDependencies": {
+    "browserify": "^5.11.1",
     "chai": "^1.9.1",
-    "coffee-script": "^1.7.1",
-    "mocha": "^1.21.4"
+    "coffeeify": "^0.7.0",
+    "function-bind": "^1.0.0",
+    "mocha": "^1.21.4",
+    "watchify": "^1.0.2"
+  },
+  "browserify": {
+    "basedir": "./",
+    "transform": [
+      "coffeeify"
+    ]
+  },
+  "testling": {
+    "harness": "mocha-bdd",
+    "files": "./test/spec.coffee"
   }
 }
