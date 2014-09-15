@@ -16,7 +16,7 @@ describe "Maker function", ->
       tag.children.should.deep.equal []
 
   describe "Building from a DOM node", ->
-    it "should produce the correct html", ->
+    it "should produce the correct instance", ->
       input = document.createElement "input"
       input.id = "the-input"
       input.classList.add "class1"
@@ -24,7 +24,12 @@ describe "Maker function", ->
       input.type = "text"
       input.name = "text-input"
       tag = tack input
-      tag.toString().should.equal '<input class="class1 class2" id="the-input" name="text-input" type="text">'
+      tag.attributes.name.should.equal "text-input"
+      tag.attributes.type.should.equal "text"
+      tag.attributes.id.should.equal "the-input"
+      tag.tagName.should.equal "input"
+      tag.classes.should.deep.equal ["class1", "class2"]
+      tag.render().should.equal '<input class="class1 class2" id="the-input" name="text-input" type="text">'
 
     it "should work recursively if node has children", ->
       html = """
@@ -42,6 +47,23 @@ describe "Maker function", ->
       tag.childAt( 0 ).tagName.should.equal "ul"
       tag.childAt( 0 ).childAt( 0 ).tagName.should.equal "li"
       tag.render().should.equal '<div id="top"><ul class="list" id="middle"><li class="item" id="bottom">Hello</li></ul></div>'
+
+  describe "building from options", ->
+    it "should throw an error if the tagName property isn't a valid HTML tag name", ->
+      ( -> tack tagName: "asdf" ).should.throw()
+    it "should create the correct instance from the options", ->
+      tag = tack
+        tagName: "input"
+        classes: ["class1", "class2"]
+        attributes:
+          type: "text"
+          id: "the-input"
+          name: "text-input"
+      tag.tagName.should.equal "input"
+      tag.attributes.type.should.equal "text"
+      tag.attributes.id.should.equal "the-input"
+      tag.attributes.name.should.equal "text-input"
+      tag.classes.should.deep.equal ["class1", "class2"]
 
 describe "Instance methods", ->
   tag = undefined

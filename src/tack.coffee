@@ -85,6 +85,7 @@ class Tack
       extend @, defaults(), param
     unless tags[@tagName]
       throw new Error "Invalid tagName: #{ @tagName }"
+
     @classes = @classes.split " " if typeof @classes is "string"
 
   id: ( id ) ->
