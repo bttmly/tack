@@ -32,6 +32,7 @@ remove = function(arr, item) {
 
 defaults = function() {
   return {
+    tagName: "div",
     attributes: {},
     classes: [],
     children: []
@@ -103,9 +104,6 @@ TackText = (function() {
 Tack = (function() {
   function Tack(param) {
     if (typeof param === "string") {
-      if (!tags[param]) {
-        throw new Error("Invalid tag name.");
-      }
       extend(this, defaults(), {
         tagName: param
       });
@@ -113,6 +111,9 @@ Tack = (function() {
       extend(this, defaults(), buildFromDomNode(param));
     } else {
       extend(this, defaults(), param);
+    }
+    if (!tags[this.tagName]) {
+      throw new Error("Invalid tagName: " + this.tagName);
     }
     if (typeof this.classes === "string") {
       this.classes = this.classes.split(" ");
@@ -129,7 +130,13 @@ Tack = (function() {
   };
 
   Tack.prototype.attr = function(name, value) {
-    if (value != null) {
+    if (name === "class") {
+      if (value != null) {
+        return this.addClass(value);
+      } else {
+        return this.classes.join(" ");
+      }
+    } else if (value != null) {
       this.attributes[name] = value;
       return this;
     } else {
@@ -144,7 +151,7 @@ Tack = (function() {
 
   Tack.prototype.addClass = function(className) {
     if (__indexOf.call(this.classes, className) < 0) {
-      this.classes.push(className);
+      this.classes = this.classes.concat(className.split(" "));
     }
     return this;
   };
@@ -235,7 +242,12 @@ Tack = (function() {
   };
 
   Tack.prototype.clone = function() {
-    return new Tack(this);
+    var clone;
+    clone = new Tack(this);
+    clone.children = clone.children.map(function(child) {
+      return child.clone();
+    });
+    return clone;
   };
 
   return Tack;
