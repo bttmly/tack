@@ -155,7 +155,7 @@ Tack = (function() {
   };
 
   Tack.prototype.hasClass = function(className) {
-    return this.classes.indexOf(className) !== -1;
+    return __indexOf.call(this.classes, className) >= 0;
   };
 
   Tack.prototype.toggleClass = function(className) {
