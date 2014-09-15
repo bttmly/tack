@@ -113,7 +113,7 @@ class Tack
     @
 
   hasClass: ( className ) ->
-    @classes.indexOf( className ) isnt -1
+    className in @classes
 
   toggleClass: ( className ) ->
     if @hasClass className
@@ -167,6 +167,7 @@ class Tack
     el
 
   clone: ->
+
     new Tack @
 
 tack = ( param ) ->
