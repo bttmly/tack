@@ -32,6 +32,7 @@ remove = ( arr, item ) ->
   arr
 
 defaults = ->
+  tagName: "div"
   attributes: {}
   classes: []
   children: []
@@ -77,12 +78,13 @@ class TackText
 class Tack
   constructor: ( param ) ->
     if typeof param is "string"
-      throw new Error "Invalid tag name." unless tags[ param ]
       extend @, defaults(), tagName: param
     else if param instanceof Element
       extend @, defaults(), buildFromDomNode( param )
     else
       extend @, defaults(), param
+    unless tags[@tagName]
+      throw new Error "Invalid tagName: #{ @tagName }"
     @classes = @classes.split " " if typeof @classes is "string"
 
   id: ( id ) ->
