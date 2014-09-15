@@ -13,15 +13,17 @@ When passed an `options` object, builds an instance into which `options` are mer
 ## Instance Methods
 
 ### `.attr(String name, [String value])`
-*Get signature*: When `value` isn't provided, returns the instance's value for the attribute `name`.
-*Set signature*: When `value` is provided, sets the instance's `name` attribute to `value` and returns the instance.
+**Get signature**: When `value` isn't provided, returns the instance's value for the attribute `name`.
+
+**Set signature**: When `value` is provided, sets the instance's `name` attribute to `value` and returns the instance.
 
 ### `.removeAttr(String name)`
 Removes the attribute called `name` from the instance.
 
 ### `.id([String value])`
-*Get signature*: When `value` isn't provided, returns the instance's value for the "id" attribute.
-*Set signature*: When `value` is provided, sets the instance's "id" attribute to `value` and returns the instance.
+**Get signature**: When `value` isn't provided, returns the instance's value for the "id" attribute.
+
+**Set signature**: When `value` is provided, sets the instance's "id" attribute to `value` and returns the instance.
 
 ### `.addClass(String className)`
 Adds a space-separated list of classes to the instance.
@@ -49,3 +51,8 @@ Creates a DOM node from an instance.
 
 ### `.clone()`
 Returns a new deep copy (i.e. children are recursively copied) of an instance.
+
+## Static Methods
+
+### `.extend(Object methods)`
+Extends `Tack.prototype` with `methods`.
