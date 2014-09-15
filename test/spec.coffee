@@ -54,12 +54,20 @@ describe "Instance methods", ->
 
   describe ".attr()", ->
     it "Sets an attribute when called with two arguments, and returns self", ->
-      tag.attr( "type", "text" ).should.equal tag
-      tag.attributes.type.should.equal "text"
+      tag.attr( "type", "value" ).should.equal tag
+      tag.attributes.type.should.equal "value"
 
     it "Returns an attribute value called with one argument", ->
-      tag.attr "type", "text"
-      tag.attr( "type" ).should.equal "text"
+      tag.attr "type", "value"
+      tag.attr( "type" ).should.equal "value"
+
+    it "Can set the 'class' attribute properly", ->
+      tag.attr( "class", "some classes" ).should.equal tag
+      tag.classes.should.deep.equal ["some", "classes"]
+
+    it "Can get the 'class' attribute properly", ->
+      tag.addClass "some classes"
+      tag.attr( "class" ).should.equal "some classes"
 
   describe ".id()", ->
     it "Sets the id attribute when called with an argument, and returns self", ->
@@ -72,12 +80,16 @@ describe "Instance methods", ->
 
   describe ".addClass()", ->
     it "Adds a class if not already present, and returns self", ->
-      tag.addClass "someThing"
       tag.addClass "otherThing"
       tag.addClass( "someThing" ).should.equal tag
       ( "someThing" in tag.classes ).should.be.ok
       tag.addClass "someThing"
       tag.classes.length.should.equal 2
+
+    it "Adds multiple space separated classes", ->
+      tag.addClass "class1 class2"
+      tag.classes.indexOf( "class1" ).should.not.equal -1
+      tag.classes.indexOf( "class2" ).should.not.equal -1
 
   describe ".removeClass()", ->
     it "Adds a class if not already present, and returns self", ->
@@ -86,6 +98,12 @@ describe "Instance methods", ->
       tag.removeClass( "someThing" ).should.equal tag
       ( "someThing" in tag.classes ).should.not.be.ok
       tag.classes.length.should.equal 1
+
+  describe ".hasClass()", ->
+    it "Returns whether or not the element has that class", ->
+      tag.addClass "has-it"
+      tag.hasClass( "has-it" ).should.equal true
+      tag.hasClass( "doesnt-have" ).should.equal false
 
   describe ".addChild()", ->
     it "Adds a child tack", ->
@@ -118,6 +136,16 @@ describe "Instance methods", ->
       node.children.length.should.equal 1
       node.children[0].tagName.should.equal "UL"
       node.children[0].children[0].tagName.should.equal "LI"
+
+  describe ".clone()", ->
+    it "Deeply clones a Tack", ->
+      tag.addChild "ul"
+      tag.childAt( 0 ).addChild "li"
+      clone = tag.clone()
+      clone.should.not.equal tag
+      clone.childAt( 0 ).should.not.equal tag.childAt 0
+      clone.childAt( 0 ).childAt( 0 ).should.not.equal tag.childAt( 0 ).childAt( 0 )
+
 
 describe "Static methods", ->
   describe ".replace()", ->

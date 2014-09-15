@@ -93,7 +93,12 @@ class Tack
       @attributes.id
 
   attr: ( name, value ) ->
-    if value?
+    if name is "class"
+      if value?
+        return @addClass value
+      else
+        return @classes.join " "
+    else if value?
       @attributes[ name ] = value
       @
     else
@@ -105,7 +110,7 @@ class Tack
 
   addClass: ( className ) ->
     unless className in @classes
-      @classes.push className
+      @classes = @classes.concat className.split " "
     @
 
   removeClass: ( className ) ->
@@ -167,8 +172,10 @@ class Tack
     el
 
   clone: ->
-
-    new Tack @
+    clone = new Tack @
+    clone.children = clone.children.map ( child ) ->
+      child.clone()
+    clone
 
 tack = ( param ) ->
   new Tack param
