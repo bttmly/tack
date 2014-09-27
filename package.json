@@ -3,13 +3,13 @@
   "version": "0.1.0",
   "repository": "https://github.com/nickb1080/tack",
   "description": "Build HTML strings programmatically",
-  "main": "./index.js",
+  "main": "./dist/tack.js",
   "directories": {
     "test": "test"
   },
   "scripts": {
-    "build": "browserify ./src/tack.coffee -s tack -o ./index.js src/tack.coffee",
-    "watch": "watchify ./src/tack.coffee -s tack -o ./index.js src/tack.coffee",
+    "build": "browserify ./src/tack.coffee -s tack -o ./dist/tack.js src/tack.coffee",
+    "watch": "watchify ./src/tack.coffee -s tack -o ./dist/tack.js src/tack.coffee",
     "test": "testling"
   },
   "author": "Nick Bottomley <nhbottomley@gmail.com>",
@@ -25,7 +25,6 @@
     "watchify": "^1.0.2"
   },
   "browserify": {
-    "basedir": "./",
     "transform": [
       "coffeeify"
     ]

@@ -1,5 +1,6 @@
 require( "chai" ).should()
 Function::bind = Function::bind or require( "function-bind" )
+
 tack = require "../src/tack.coffee"
 
 describe "Maker function", ->
@@ -115,6 +116,7 @@ describe "Instance methods", ->
 
   describe ".removeClass()", ->
     it "Adds a class if not already present, and returns self", ->
+      tag.addClass "someThing"
       tag.addClass "someThing"
       tag.addClass "otherThing"
       tag.removeClass( "someThing" ).should.equal tag

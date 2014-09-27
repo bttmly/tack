@@ -5,7 +5,7 @@
     "Nick Bottomley <nhbottomley@gmail.com>"
   ],
   "description": "Programmatically build HTML strings",
-  "main": "dist/tack.js",
+  "main": "./dist/tack.js",
   "moduleType": [
     "globals",
     "node"
