@@ -1,6 +1,6 @@
 {
   "name": "tack",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "repository": "https://github.com/nickb1080/tack",
   "description": "Build HTML strings programmatically",
   "main": "lib/index.js",
