@@ -7,14 +7,14 @@ iframe ins kbd label legend li main map mark menu meter nav noscript object
 ol optgroup option output p pre progress q rp rt ruby s samp script section
 select small span strong style sub summary sup table tbody td textarea tfoot
 th thead time title tr u ul var video area base br col command embed hr img
-input keygen link meta param source track wbr".split( /\s+/ ).reduce ( tags, tag ) ->
+input keygen link meta param source track wbr".split(/\s+/).reduce (tags, tag) ->
   tags[tag] = true
   tags
 , Object.create null
 
 selfClosingTags =
 "area base br col command embed hr img input keygen link meta param
- source track wbr".split( /\s+/ ).reduce ( selfClosingTags, tag ) ->
+ source track wbr".split(/\s+/).reduce (selfClosingTags, tag) ->
   selfClosingTags[tag] = true
   tags[tag] = true
   selfClosingTags
@@ -24,7 +24,7 @@ map = Function::call.bind Array::map
 each = Function::call.bind Array::forEach
 reduce = Function::call.bind Array::reduce
 
-remove = ( arr, item ) ->
+remove = (arr, item) ->
   i = arr.indexOf item
   while i > -1
     arr.splice i, 1
@@ -37,29 +37,29 @@ defaults = ->
   classes: []
   children: []
 
-extend = ( target, objs... ) ->
+extend = (target, objs...) ->
   for obj in objs
     for prop of obj
       target[prop] = obj[prop]
   target
 
-normalizeTextNode = ( node ) ->
+normalizeTextNode = (node) ->
   if node.nodeType is 3
-    node.textContent = node.textContent.replace( /↵/g, "\n" ).trim()
+    node.textContent = node.textContent.replace(/↵/g, "\n").trim()
 
-buildFromDomNode = ( node ) ->
+buildFromDomNode = (node) ->
   opts =
     attributes: {}
   if node.nodeType is 3
     new TackText node.textContent
   else if node.nodeType is 1
-    each node.attributes, ( attr ) ->
+    each node.attributes, (attr) ->
       if attr.name is "class"
         opts.classes = attr.value.split " "
       else
         opts.attributes[attr.name] = attr.value
     opts.tagName = node.tagName.toLowerCase()
-    opts.children = reduce node.childNodes, ( acc, node ) ->
+    opts.children = reduce node.childNodes, (acc, node) ->
       normalizeTextNode node
       if node.nodeType is 1 or node.textContent
         acc.push buildFromDomNode node
@@ -68,7 +68,7 @@ buildFromDomNode = ( node ) ->
     new Tack opts
 
 class TackText
-  constructor: ( str ) ->
+  constructor: (str) ->
     @text = str
 
   render: -> @text
@@ -76,11 +76,11 @@ class TackText
   toString: -> @render()
 
 class Tack
-  constructor: ( param ) ->
+  constructor: (param) ->
     if typeof param is "string"
       extend @, defaults(), tagName: param
     else if param instanceof Element
-      extend @, defaults(), buildFromDomNode( param )
+      extend @, defaults(), buildFromDomNode(param)
     else
       extend @, defaults(), param
     unless tags[@tagName]
@@ -88,14 +88,14 @@ class Tack
 
     @classes = @classes.split " " if typeof @classes is "string"
 
-  id: ( id ) ->
+  id: (id) ->
     if id?
       @attributes.id = id
       @
     else
       @attributes.id
 
-  attr: ( name, value ) ->
+  attr: (name, value) ->
     if name is "class"
       if value?
         return @addClass value
@@ -107,40 +107,40 @@ class Tack
     else
       @attributes[ name ]
 
-  removeAttr: ( name ) ->
+  removeAttr: (name) ->
     delete @attributes[ name ]
     @
 
-  addClass: ( className ) ->
+  addClass: (className) ->
     unless className in @classes
       @classes = @classes.concat className.split " "
     @
 
-  removeClass: ( className ) ->
+  removeClass: (className) ->
     remove @classes, className
     @
 
-  hasClass: ( className ) ->
+  hasClass: (className) ->
     className in @classes
 
-  toggleClass: ( className ) ->
+  toggleClass: (className) ->
     if @hasClass className
       @removeClass className
     else
       @addClass className
 
-  addChild: ( param ) ->
+  addChild: (param) ->
     @children.push tack param
     @
 
-  childAt: ( index ) ->
+  childAt: (index) ->
     @children[index]
 
-  removeChildAt: ( index ) ->
+  removeChildAt: (index) ->
     @children.splice index, 1
     @
 
-  addText: ( str ) ->
+  addText: (str) ->
     @children.push new TackText str
     @
 
@@ -150,7 +150,7 @@ class Tack
     result.push "<#{ @tagName }"
     if @classes.length
       result.push " class=\"#{ @classes.join " " }\""
-    attrs = Object.keys( @attributes ).sort()
+    attrs = Object.keys(@attributes).sort()
     for attr in attrs
       str += " #{ attr }=\"#{ @attributes[ attr ] }\""
     result.push str
@@ -169,27 +169,27 @@ class Tack
       el.setAttribute attr, @attributes[attr]
     for cl in @classes
       el.classList.add cl
-    el.innerHTML = @children.map ( child ) ->
+    el.innerHTML = @children.map (child) ->
       child.render()
     .join ""
     el
 
   clone: ->
     clone = new Tack @
-    clone.children = clone.children.map ( child ) ->
+    clone.children = clone.children.map (child) ->
       child.clone()
     clone
 
-tack = ( param ) ->
+tack = (param) ->
   new Tack param
 
 extend tack,
   fromNode: buildFromDomNode
-  replace: ( oldNode, newNode ) ->
+  replace: (oldNode, newNode) ->
     parent = oldNode.parentElement
     parent.insertBefore newNode, oldNode
     parent.removeChild oldNode
-  extend: ( obj ) ->
+  extend: (obj) ->
     extend Tack::, obj
 
 module.exports = tack
